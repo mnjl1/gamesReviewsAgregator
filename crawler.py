@@ -2,6 +2,9 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import content
+import sqlite3
+import datetime
+from datetime import datetime
 
 class Crawler:
 
@@ -48,10 +51,16 @@ class Crawler:
             body = self.safeGet(bs, self.site.bodyTag)
             imageSrc = self.getImage(bs, self.site.imgTag)
             score = self.safeGet(bs, self.site.scoreTag)
-            if title != '' and body != '' and imageSrc != '' and score != '':
-                page = content.Content(url, title, imageSrc,
-                                        body, score)
-                page.print_article()
+            if title != '' and body != '':
+                db = sqlite3.connect('review.db')
+                db.execute("INSERT INTO reviews(title, url, img_source, body,"
+                            +"created_at, score) VALUES(:title, :url,"
+                            +":imageSrc, :body, :created_at, :score)",
+                            dict(title=title, url=url, imageSrc=imageSrc,
+                             body=body, created_at=datetime.now(), score=score))
+                db.commit()
+                db.close()
+
 
 
     def crawl(self):

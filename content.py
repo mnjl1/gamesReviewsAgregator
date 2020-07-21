@@ -15,5 +15,5 @@ class Content:
         print(f'Title: {self.title}')
         print(f'Url: {self.url}')
         print(f'Image source: {self.imageSrc}')
-        print(f'Body: {self.body}')
+        # print(f'Body: {self.body}')
         print(f'Score {self.score}')
