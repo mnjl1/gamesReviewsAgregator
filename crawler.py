@@ -2,14 +2,14 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import content
-import sqlite3
 import datetime
 from datetime import datetime
 
 class Crawler:
 
-    def __init__(self, site):
+    def __init__(self, site, data_base):
         self.site = site
+        self.data_base = data_base
         self.visited = []
 
 
@@ -52,14 +52,12 @@ class Crawler:
             imageSrc = self.getImage(bs, self.site.imgTag)
             score = self.safeGet(bs, self.site.scoreTag)
             if title != '' and body != '':
-                db = sqlite3.connect('review.db')
-                db.execute("INSERT INTO reviews(title, url, img_source, body,"
+                self.data_base.execute("INSERT INTO reviews(title, url, img_source, body,"
                             +"created_at, score) VALUES(:title, :url,"
                             +":imageSrc, :body, :created_at, :score)",
                             dict(title=title, url=url, imageSrc=imageSrc,
                              body=body, created_at=datetime.now(), score=score))
-                db.commit()
-                db.close()
+                self.data_base.commit()
 
 
 
