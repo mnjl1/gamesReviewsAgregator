@@ -41,7 +41,6 @@ def respond():
     text = update.message.text.encode('utf-8').decode()
     response = get_last_reviews()
     bot.sendMessage(chat_id=chat_id, text = response, reply_to_message_id = msg_id)
-
     return 'ok'
 
 @app.route('/setwebhook', methods = ['GET', 'POST'])
