@@ -1,10 +1,18 @@
 from flask import Flask, request, redirect, render_template, session
 from flask_session import Session
+import telegram
+from telebot.credentials import bot_token, bot_user_name, heroku_url
+from telebot.mastermind import get_response
 import sqlite3
 import crawler
 from crawler import Crawler
 import website
 from website import Website
+
+global bot
+global TOKEN
+TOKEN = bot_token
+bot = telegram.Bot(token=TOKEN)
 
 app = Flask(__name__)
 
@@ -22,7 +30,28 @@ gameSpot = Website('Gamespot', 'https://www.gamespot.com', '^(/reviews/)',
 gsCrawler = Crawler(gameSpot, db)
 gsCrawler.crawl()
 
+#bot API
 
+@app.route(f'/{TOKEN}', methods = ['POST'])
+def respond():
+    update = telegram.Update.de_json(request.get_json(force = True), bot)
+    chat_id = update.message.chat.id
+    msg_id = update.message.message_id
+    text = update.message.text.encode('utf-8').decode()
+    response = get_response(text)
+    bot.sendMessage(chat_id=chat_id, text = response, reply_to_message_id = msg_id)
+
+    return 'ok'
+
+@app.route('/setwebhook', methods = ['GET', 'POST'])
+def set_webhook():
+    s = bot.setWebhook(f'{heroku_url}{TOKEN}')
+    if s:
+        return "webhook setup ok"
+    else:
+        return "webhook setup failed"
+
+#web API
 @app.route('/')
 def index():
     con = db.cursor()
