@@ -60,3 +60,6 @@ def index():
     for row in top_reviews:
         rows.append(row)
     return render_template("index.html", rows=rows)
+
+if __name__ == '__main__':
+    application.run(threaded=True)
