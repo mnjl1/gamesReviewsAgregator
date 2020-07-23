@@ -3,6 +3,7 @@ from flask_session import Session
 import telegram
 from telebot.credentials import bot_token, bot_user_name, heroku_url
 from telebot.mastermind import get_response
+from service.getDataFromDatabase import get_last_reviews
 import sqlite3
 import crawler
 from crawler import Crawler
@@ -38,7 +39,7 @@ def respond():
     chat_id = update.message.chat.id
     msg_id = update.message.message_id
     text = update.message.text.encode('utf-8').decode()
-    response = get_response(text)
+    response = get_last_reviews()
     bot.sendMessage(chat_id=chat_id, text = response, reply_to_message_id = msg_id)
 
     return 'ok'
@@ -54,12 +55,8 @@ def set_webhook():
 #web API
 @app.route('/')
 def index():
-    con = db.cursor()
-    top_reviews = con.execute("SELECT title, url, img_source, score FROM reviews")
-    rows = list()
-    for row in top_reviews:
-        rows.append(row)
-    return render_template("index.html", rows=rows)
+    return render_template("index.html", rows=get_last_reviews())
+
 
 if __name__ == '__main__':
     application.run(threaded=True)
