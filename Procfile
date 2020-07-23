@@ -1,1 +1,1 @@
-web: gunicorn game-reviews-agregator.wsgi
+web: gunicorn app:app
