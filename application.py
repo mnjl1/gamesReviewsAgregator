@@ -45,7 +45,7 @@ def respond():
 
 @app.route('/setwebhook', methods = ['GET', 'POST'])
 def set_webhook():
-    s = bot.setWebhook(f'{heroku_url}{TOKEN}')
+    s = bot.setWebhook('{heroku_url}{HOOK}'.format(heroku_url=heroku_url, HOOK=bot_token))
     if s:
         return "webhook setup ok"
     else:
