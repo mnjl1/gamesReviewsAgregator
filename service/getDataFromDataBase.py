@@ -7,9 +7,9 @@ def get_last_reviews_json(db):
         rows.append(row)
     first_title = rows[0]
     result = dict()
-    result['title']=first_title[0][0]
-    result['score']=first_title[0][2]
-    result['url']=first_title[0][1]
+    result['title']=first_title[0]
+    result['score']=first_title[2]
+    result['url']=first_title[1]
     return result
 
 def get_last_reviews_web(db):
