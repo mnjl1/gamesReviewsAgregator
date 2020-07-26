@@ -10,7 +10,7 @@ def get_last_reviews_json(db):
     result['title']=first_title[0][0]
     result['score']=first_title[0][2]
     result['url']=first_title[0][1]
-    return json.dumps(result)
+    return result
 
 def get_last_reviews_web(db):
     top_reviews = get_reviews_from_db(db)
