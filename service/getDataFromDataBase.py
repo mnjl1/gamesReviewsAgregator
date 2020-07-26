@@ -22,4 +22,4 @@ def get_last_reviews_web(db):
     return rows
 
 def get_reviews_from_db(db):
-    return db.cursor().execute("SELECT title, url, img_source, score FROM reviews ORDER BY created_at DESC")
+    return db.cursor().execute("SELECT title, url, img_source, score, created_at FROM reviews ORDER BY created_at DESC")
