@@ -28,13 +28,14 @@ db = sqlite3.connect('review.db', check_same_thread=False)
 gameSpot = Website('Gamespot', 'https://www.gamespot.com', '^(/reviews/)',
                     False, 'h1', 'img.js-box-art',
                     'div.js-content-entity-body',
-                    'div.gs-score__cell', 'time')
+                    'time',
+                    'div.gs-score__cell')
 
 gsCrawler = Crawler(gameSpot, db)
 gsCrawler.crawl()
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=lambda : gsCrawler.crawl(), trigger='interval', seconds=60)
+scheduler.add_job(func=lambda : gsCrawler.crawl(), trigger='interval', seconds=600)
 scheduler.start()
 
 #bot API

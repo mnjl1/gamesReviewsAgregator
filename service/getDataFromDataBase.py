@@ -18,7 +18,6 @@ def get_last_reviews_web(db):
     for row in top_reviews:
         rows.append(row)
     first_title = rows[0]
-    print(json.dumps(first_title))
     return rows
 
 def get_reviews_from_db(db):

@@ -51,13 +51,13 @@ class Crawler:
             body = self.safeGet(bs, self.site.bodyTag)
             imageSrc = self.getImage(bs, self.site.imgTag)
             score = self.safeGet(bs, self.site.scoreTag)
-            datePub = self.safeGet(bs, self.site.dateTag)
+            created_at = self.safeGet(bs, self.site.dateTag)
             if title != '' and body != '':
                 self.data_base.execute("INSERT INTO reviews(title, url, img_source, body,"
                             +"created_at, score) VALUES(:title, :url,"
                             +":imageSrc, :body, :created_at, :score)",
                             dict(title=title, url=url, imageSrc=imageSrc,
-                             body=body, created_at=datePub, score=score))
+                             body=body, created_at=created_at, score=score))
                 self.data_base.commit()
 
 
