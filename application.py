@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template, session
 from flask_session import Session
-import schedule
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 import time
 import telegram
 from telebot.credentials import bot_token, bot_user_name, heroku_url
@@ -29,6 +30,11 @@ gameSpot = Website('Gamespot', 'https://www.gamespot.com', '^(/reviews/)',
                     'div.js-content-entity-body',
                     'div.gs-score__cell')
 
+gsCrawler = Crawler(gameSpot, db)
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=lambda : gsCrawler.crawl(), trigger='interval', seconds=60)
+scheduler.start()
 
 #bot API
 
@@ -55,12 +61,6 @@ def set_webhook():
 def index():
     return render_template("index.html", rows=get_last_reviews_web(db))
 
-gsCrawler = Crawler(gameSpot, db)
-schedule.every(1).minute.do(lambda: gsCrawler.crawl())
-
-while 1:
-    schedule.run_pending()
-    time.sleep(1)
 
 if __name__ == '__main__':
     application.run(threaded=True)

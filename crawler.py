@@ -62,6 +62,7 @@ class Crawler:
 
 
     def crawl(self):
+        print('Checking new content...')
         bs = self.getPage(self.site.url)
         targetPages = bs.findAll('a', href=re.compile(self.site.targetPattern))
         for targetPage in targetPages:
