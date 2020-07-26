@@ -1,21 +1,25 @@
 import json
 
 def get_last_reviews_json(db):
-    con = db.cursor()
-    top_reviews = con.execute("SELECT title, url, img_source, score FROM reviews")
+    top_reviews = get_reviews_from_db(db)
     rows = list()
     for row in top_reviews:
         rows.append(row)
     first_title = rows[0]
-    print(json.dumps(first_title))
-    return json.dumps(first_title)
+    result = dict()
+    result['title']=first_title[0][0]
+    result['score']=first_title[0][2]
+    result['url']=first_title[0][1]
+    return json.dumps(result)
 
 def get_last_reviews_web(db):
-    con = db.cursor()
-    top_reviews = con.execute("SELECT title, url, img_source, score FROM reviews")
+    top_reviews = get_reviews_from_db(db)
     rows = list()
     for row in top_reviews:
         rows.append(row)
     first_title = rows[0]
     print(json.dumps(first_title))
     return rows
+
+def get_reviews_from_db(db):
+    return db.cursor().execute("SELECT title, url, img_source, score FROM reviews ORDER BY created_at DESC")
