@@ -67,6 +67,7 @@ class Crawler:
         for targetPage in targetPages:
             targetPage = targetPage.attrs['href']
             if targetPage not in self.visited:
+                print("new Content detected..")
                 self.visited.append(targetPage)
                 if not self.site.absoluteUrl:
                     targetPage = f'{self.site.url}{targetPage}'

@@ -1,5 +1,7 @@
 from flask import Flask, request, redirect, render_template, session
 from flask_session import Session
+import schedule
+import time
 import telegram
 from telebot.credentials import bot_token, bot_user_name, heroku_url
 from telebot.mastermind import get_response
@@ -28,9 +30,6 @@ gameSpot = Website('Gamespot', 'https://www.gamespot.com', '^(/reviews/)',
                     'div.gs-score__cell')
 
 
-gsCrawler = Crawler(gameSpot, db)
-gsCrawler.crawl()
-
 #bot API
 
 @app.route(f'/{TOKEN}', methods = ['POST'])
@@ -56,6 +55,12 @@ def set_webhook():
 def index():
     return render_template("index.html", rows=get_last_reviews_web(db))
 
+gsCrawler = Crawler(gameSpot, db)
+schedule.every(1).minute.do(lambda: gsCrawler.crawl())
+
+while 1:
+    schedule.run_pending()
+    time.sleep(1)
 
 if __name__ == '__main__':
     application.run(threaded=True)

@@ -6,7 +6,9 @@ def get_last_reviews_json(db):
     rows = list()
     for row in top_reviews:
         rows.append(row)
-    return json.dumps(rows)
+    first_title = rows[0]
+    print(json.dumps(first_title))
+    return json.dumps(first_title)
 
 def get_last_reviews_web(db):
     con = db.cursor()
@@ -14,4 +16,6 @@ def get_last_reviews_web(db):
     rows = list()
     for row in top_reviews:
         rows.append(row)
+    first_title = rows[0]
+    print(json.dumps(first_title))
     return rows
